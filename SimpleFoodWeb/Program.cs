@@ -25,6 +25,11 @@ namespace SimpleFoodWeb
             // set number of trophic levels
             var nLevels = 8;
 
+            // Flag for Holling type I or Holling type II grazing 
+            // 1 for Holling I, 2 for Holling II
+            // ONLY HOLLING TYPE I GRAZING HAS BEEN IMPLEMENTED
+            var holling = 1; // Do not change this parameter
+
             // set time step parameters
             var dt = 0.02;
             var maxTime = 3000.0;
@@ -34,7 +39,7 @@ namespace SimpleFoodWeb
             var nStepOutMax = Convert.ToInt32(nStepMax / nStepOut);
 
             // Initialize working arrays
-            var bmassN = new double[nLevels];
+            var bmassN = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
             var dBmassNdt = new double[nLevels];
 
             // Initialize output arrays
@@ -133,6 +138,7 @@ namespace SimpleFoodWeb
 
             // Initiate arrays for heterotrophic traits
             var gmax = new double[nLevels, nLevels];
+            var gmax1 = new double[nLevels, nLevels];
             var kbN = new double[nLevels, nLevels];
             var gamma = new double[nLevels, nLevels];
             var eye = new double[nLevels, nLevels];
@@ -156,8 +162,20 @@ namespace SimpleFoodWeb
                 for(var j = 0; j < gmax.GetLength(1); j++)
                 {
                     gmax[i, j] = aGraz * Math.Pow(cellVol[j], bGraz) * grazInteract[i, j];
+                    eye[i, j] = i;
                 }
             }
+            
+            // Set gmax1 = grazing eate for Holling I ((mol N l-1 day)-1)
+            for(var i = 0; i < gmax1.GetLength(0); i++)
+            {
+                for(var j = 0; j < gmax1.GetLength(1); j++)
+                {
+                    // Ask Mick about this.. gmax and gmax1 are identical(?)
+                    gmax1[i, j] = gmax[i, j] / 1.0;
+                }
+            }
+            
             // Print matrix to console
             //
             //var rowCount = gmax.GetLength(0);
@@ -168,7 +186,7 @@ namespace SimpleFoodWeb
             //        Console.Write(String.Format("{0}\t", gmax[row, col]));
             //    Console.WriteLine();
             //}
-
+            
             // Calculate half-saturation constant for grazing (from Ward et al. (2013))
             for (var i = 0; i < kbN.GetLength(0); i++)
             {
@@ -233,15 +251,28 @@ namespace SimpleFoodWeb
                     }
 
                     // Evaluate heterotrophy
-                    // Only Holling I type has been implemented
-                    //for(var i = 0; i < imax; i++)
-                    //{
-                    //    var sum1 = 0.0;
-                    //    for(var j = 0; j < jmax; j++)
-                    //    {
-                            
-                    //    }
-                    //} 
+                    for (var i = 0; i < imax; i++)
+                    {
+                        // 
+                        var sum1 = 0.0;
+                        for (var j = 0; j < jmax; j++)
+                        {
+                            sum1 = sum1 + (gamma[j, i] * gmax1[j, i] * bmassN[i] * bmassN[j]);
+                            heterotrophy[i] = sum1;
+                        }
+
+                        // Predation by all others (ask Mick)
+                        var sum2 = 0.0;
+                        for(var k = 0; k < kmax; k++)
+                        {
+                            sum2 = sum2 + (gmax1[i, k] * bmassN[k] * bmassN[i]);
+                            predation[i] = sum2;
+                        }
+                    }
+
+                    // Write to console
+                    Console.WriteLine("[{0}]", string.Join(", ", heterotrophy));
+
                 }
             }
 
