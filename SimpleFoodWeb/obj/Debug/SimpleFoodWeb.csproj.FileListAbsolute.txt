@@ -1,0 +1,6 @@
+C:\Users\erikm\Documents\Visual Studio 2015\Projects\SimpleFoodWeb\SimpleFoodWeb\bin\Debug\SimpleFoodWeb.exe.config
+C:\Users\erikm\Documents\Visual Studio 2015\Projects\SimpleFoodWeb\SimpleFoodWeb\bin\Debug\SimpleFoodWeb.exe
+C:\Users\erikm\Documents\Visual Studio 2015\Projects\SimpleFoodWeb\SimpleFoodWeb\bin\Debug\SimpleFoodWeb.pdb
+C:\Users\erikm\Documents\Visual Studio 2015\Projects\SimpleFoodWeb\SimpleFoodWeb\obj\Debug\SimpleFoodWeb.csprojResolveAssemblyReference.cache
+C:\Users\erikm\Documents\Visual Studio 2015\Projects\SimpleFoodWeb\SimpleFoodWeb\obj\Debug\SimpleFoodWeb.exe
+C:\Users\erikm\Documents\Visual Studio 2015\Projects\SimpleFoodWeb\SimpleFoodWeb\obj\Debug\SimpleFoodWeb.pdb
