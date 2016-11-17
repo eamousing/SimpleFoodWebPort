@@ -1,0 +1,12 @@
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\SimpleFoodWeb.exe.config
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\SimpleFoodWeb.exe
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\SimpleFoodWeb.pdb
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\DynamicInterop.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\NetCDFInterop.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\ScientificDataSet.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\SDSLite.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\DynamicInterop.xml
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\ScientificDataSet.xml
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\x64\Debug\SimpleFoodWeb.exe
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\x64\Debug\SimpleFoodWeb.pdb
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\x64\Debug\SimpleFoodWeb.csprojResolveAssemblyReference.cache

@@ -10,3 +10,9 @@ C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\Debug\SimpleFoodWeb.pd
 C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\SimpleFoodWeb.exe
 C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\SimpleFoodWeb.pdb
 C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\Debug\SimpleFoodWeb.csprojResolveAssemblyReference.cache
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\DynamicInterop.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\NetCDFInterop.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\ScientificDataSet.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\SDSLite.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\DynamicInterop.xml
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\Debug\ScientificDataSet.xml
