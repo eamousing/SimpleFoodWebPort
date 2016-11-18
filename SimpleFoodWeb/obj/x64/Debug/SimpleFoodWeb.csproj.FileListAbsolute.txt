@@ -10,3 +10,7 @@ C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\ScientificDa
 C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\x64\Debug\SimpleFoodWeb.exe
 C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\x64\Debug\SimpleFoodWeb.pdb
 C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\obj\x64\Debug\SimpleFoodWeb.csprojResolveAssemblyReference.cache
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\MathNet.Numerics.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\MathNet.Numerics.xml
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\FileHelpers.dll
+C:\Users\erikm\GitHub\SimpleFoodWebPort\SimpleFoodWeb\bin\x64\Debug\FileHelpers.xml

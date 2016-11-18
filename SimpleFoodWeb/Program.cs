@@ -15,10 +15,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra;
+using FileHelpers;
+
+
 
 
 namespace SimpleFoodWeb
 {
+    // Create class for writing the final model output
+    [DelimitedRecord(",")]
+    public class WriteOutput
+    {
+        public double nsupply;
+        public double bmass0;
+        public double bmass1;
+        public double bmass2;
+        public double bmass3;
+        public double hmass0;
+        public double hmass1;
+        public double hmass2;
+        public double hmass3;
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -28,12 +47,12 @@ namespace SimpleFoodWeb
 
             // Flag for Holling type I or Holling type II grazing 
             // 1 for Holling I, 2 for Holling II
-            // ONLY HOLLING TYPE I GRAZING HAS BEEN IMPLEMENTED
-            var holling = 1; // Do not change this parameter
+            // Results for Holling type II looks strange - have to investigate.
+            var holling = 1;
 
             // set time step parameters
-            var dt = 0.05;
-            var maxTime = 3000.0;
+            var dt = 0.01;
+            var maxTime = 10000.0;
             var nStepMax = Convert.ToInt32(Math.Round(maxTime / dt));
             var timeOut = 1000.0;
             var nStepOut = nStepMax * timeOut / maxTime;
@@ -177,16 +196,6 @@ namespace SimpleFoodWeb
                 }
             }
 
-            // Print matrix to console
-            //
-            //var rowCount = gmax.GetLength(0);
-            //var colCount = gmax.GetLength(1);
-            //for (int row = 0; row < rowCount; row++)
-            //{
-            //    for (int col = 0; col < colCount; col++)
-            //        Console.Write(String.Format("{0}\t", gmax[row, col]));
-            //    Console.WriteLine();
-            //}
 
             // Calculate half-saturation constant for grazing (from Ward et al. (2013))
             for (var i = 0; i < kbN.GetLength(0); i++)
@@ -217,7 +226,13 @@ namespace SimpleFoodWeb
 
             // Start loop over snitrate (nitrate supply rate)
 
-            for (var sStep = 0; sStep < 10; sStep++)
+            // Create FileHelper engine for writing csv output
+            var headerLine = @"nsupply,bmass0,bmass1,bmass2,bmass3,hmass0,hmass1,hmass2,hmass3";
+            var engine = new FileHelperEngine<WriteOutput>() { HeaderText = headerLine};
+            var finalOutput = new List<WriteOutput>();
+
+            var sStepMax = 10;
+            for (var sStep = 0; sStep < sStepMax; sStep++)
             {
                 var sNitrate = 0.02 + sStep * 0.06;
                 Console.WriteLine("sNitrate = {0}", sNitrate); // Place holder is not working
@@ -239,6 +254,8 @@ namespace SimpleFoodWeb
                 // Set nitrate concentration
                 var nitrate = 1.0;
 
+
+
                 // Start main time loop
                 for (var nStep = 0; nStep < nStepMax; nStep++)
                 {
@@ -257,23 +274,39 @@ namespace SimpleFoodWeb
                     // Evaluate heterotrophy
                     for (var i = 0; i < imax; i++)
                     {
-                        if (holling == 1)
+                        // 
+                        var sum1 = 0.0;
+                        var limita = 0.0;
+
+                        for (var j = 0; j < jmax; j++)
                         {
-                            // 
-                            var sum1 = 0.0;
-                            for (var j = 0; j < jmax; j++)
+                            if(holling == 1)
                             {
                                 sum1 = sum1 + (gamma[j, i] * gmax1[j, i] * bmassN[i] * bmassN[j]);
-                                heterotrophy[i] = sum1;
                             }
+                            if(holling == 2)
+                            {
+                                limita = bmassN[j] / (bmassN[j] + kbN[j, i]);
+                                sum1 = sum1 + (gamma[j, i] * gmax[j, i] * limita * bmassN[i]);
+                            }
+                            heterotrophy[i] = sum1;
+                        }
 
-                            // Predation by all others (ask Mick)
-                            var sum2 = 0.0;
-                            for (var k = 0; k < kmax; k++)
+                        // Predation by all others (ask Mick)
+                        var sum2 = 0.0;
+                        var limitb = 0.0;
+                        for (var k = 0; k < kmax; k++)
+                        {
+                            if(holling == 1)
                             {
                                 sum2 = sum2 + (gmax1[i, k] * bmassN[k] * bmassN[i]);
-                                predation[i] = sum2;
                             }
+                            if(holling == 2)
+                            {
+                                limitb = bmassN[i] / (bmassN[i] + kbN[i, k]);
+                                sum2 = sum2 + (gmax[i, k] * limitb * bmassN[k]);
+                            }
+                            predation[i] = sum2;
                         }
                     }
 
@@ -355,6 +388,53 @@ namespace SimpleFoodWeb
                 // End main time loop
                 Console.WriteLine("end off loop");
 
+                var bmassN_Final = new double[sStepMax, nLevels];
+
+                //var bmassN_Final = new double[sStep, nLevels];
+                //for (var i = 0; i < nLevels; i++)
+                //{
+                //    bmassN_Final[sStep, i] = bmassN_Out[i, (nStepOutMax-1)];
+                //}
+
+
+                // Save output of each nitrate supply rate loop
+
+
+                finalOutput.Add(new WriteOutput()
+                {
+                    nsupply = sNitrate,
+                    bmass0 = bmassN_Out[0, (bmassN_Out.GetLength(1)-1)],
+                    bmass1 = bmassN_Out[2, (bmassN_Out.GetLength(1) - 1)],
+                    bmass2 = bmassN_Out[4, (bmassN_Out.GetLength(1) - 1)],
+                    bmass3 = bmassN_Out[6, (bmassN_Out.GetLength(1) - 1)],
+                    hmass0 = bmassN_Out[1, (bmassN_Out.GetLength(1) - 1)],
+                    hmass1 = bmassN_Out[3, (bmassN_Out.GetLength(1) - 1)],
+                    hmass2 = bmassN_Out[5, (bmassN_Out.GetLength(1) - 1)],
+                    hmass3 = bmassN_Out[7, (bmassN_Out.GetLength(1) - 1)],
+                });
+
+                //for(var i = 0; i < nLevels; i++)
+                //{
+                //    finalOutput.Add(new WriteOutput()
+                //    {
+                //        bmass0 = bmassN_Out[i, (nStepOutMax-1)],
+                //        bmass1 = bmassN_Out[i, (nStepOutMax - 1)]
+
+                //    });
+                //}
+
+                              
+                // Print matrix to console
+                //
+                //var rowCount = gmax.GetLength(0);
+                //var colCount = gmax.GetLength(1);
+                //for (int row = 0; row < rowCount; row++)
+                //{
+                //    for (int col = 0; col < colCount; col++)
+                //        Console.Write(String.Format("{0}\t", gmax[row, col]));
+                //    Console.WriteLine();
+                //}
+
 
 
                 if (sStep == 0)
@@ -367,7 +447,10 @@ namespace SimpleFoodWeb
                 {
                     Console.WriteLine("looping");
                 }
+
+                
             }
+            engine.WriteFile("bmass_out_test.csv", finalOutput);
         }
     }
 }
