@@ -24,6 +24,9 @@ using FileHelpers;
 namespace SimpleFoodWeb
 {
     // Create class for writing the final model output
+    /// <summary>
+    /// <todo>Extend to include other output than biomass (e.g. production)</todo>
+    /// </summary>
     [DelimitedRecord(",")]
     public class WriteOutput
     {
@@ -224,13 +227,13 @@ namespace SimpleFoodWeb
             var jmax = nLevels;
             var kmax = nLevels;
 
-            // Start loop over snitrate (nitrate supply rate)
-
             // Create FileHelper engine for writing csv output
             var headerLine = @"nsupply,bmass0,bmass1,bmass2,bmass3,hmass0,hmass1,hmass2,hmass3";
-            var engine = new FileHelperEngine<WriteOutput>() { HeaderText = headerLine};
+            var engine = new FileHelperEngine<WriteOutput>() { HeaderText = headerLine };
+            // Make instance for the csv writer engine to hold output before file is written to disk.
             var finalOutput = new List<WriteOutput>();
 
+            // Start loop over snitrate (nitrate supply rate)
             var sStepMax = 10;
             for (var sStep = 0; sStep < sStepMax; sStep++)
             {
@@ -253,8 +256,6 @@ namespace SimpleFoodWeb
 
                 // Set nitrate concentration
                 var nitrate = 1.0;
-
-
 
                 // Start main time loop
                 for (var nStep = 0; nStep < nStepMax; nStep++)
@@ -386,24 +387,13 @@ namespace SimpleFoodWeb
                     }
                 }
                 // End main time loop
-                Console.WriteLine("end off loop");
-
-                var bmassN_Final = new double[sStepMax, nLevels];
-
-                //var bmassN_Final = new double[sStep, nLevels];
-                //for (var i = 0; i < nLevels; i++)
-                //{
-                //    bmassN_Final[sStep, i] = bmassN_Out[i, (nStepOutMax-1)];
-                //}
-
-
-                // Save output of each nitrate supply rate loop
-
-
+                //Console.WriteLine("end off loop");
+                
+                // Save output of each nitrate supply rate loop to csv writing engine
                 finalOutput.Add(new WriteOutput()
                 {
                     nsupply = sNitrate,
-                    bmass0 = bmassN_Out[0, (bmassN_Out.GetLength(1)-1)],
+                    bmass0 = bmassN_Out[0, (bmassN_Out.GetLength(1) - 1)],
                     bmass1 = bmassN_Out[2, (bmassN_Out.GetLength(1) - 1)],
                     bmass2 = bmassN_Out[4, (bmassN_Out.GetLength(1) - 1)],
                     bmass3 = bmassN_Out[6, (bmassN_Out.GetLength(1) - 1)],
@@ -413,17 +403,6 @@ namespace SimpleFoodWeb
                     hmass3 = bmassN_Out[7, (bmassN_Out.GetLength(1) - 1)],
                 });
 
-                //for(var i = 0; i < nLevels; i++)
-                //{
-                //    finalOutput.Add(new WriteOutput()
-                //    {
-                //        bmass0 = bmassN_Out[i, (nStepOutMax-1)],
-                //        bmass1 = bmassN_Out[i, (nStepOutMax - 1)]
-
-                //    });
-                //}
-
-                              
                 // Print matrix to console
                 //
                 //var rowCount = gmax.GetLength(0);
@@ -434,22 +413,8 @@ namespace SimpleFoodWeb
                 //        Console.Write(String.Format("{0}\t", gmax[row, col]));
                 //    Console.WriteLine();
                 //}
-
-
-
-                if (sStep == 0)
-                {
-                    Console.WriteLine("The first loop has now finished");
-
-                }
-
-                else
-                {
-                    Console.WriteLine("looping");
-                }
-
-                
             }
+            // Write output to csv file on disk.
             engine.WriteFile("bmass_out_test.csv", finalOutput);
         }
     }
